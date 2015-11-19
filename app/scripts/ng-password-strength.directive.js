@@ -15,7 +15,7 @@
 
     function ngPasswordStrength(PasswordStrengthService) {
       return {
-        template: '<div class="progress {{valueClass.outter}}"><div class="{{valueClass.inner}} {{innerClass}}" role="progressbar" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="100" ng-style="{width : ( value + \'%\' ) }"><span class="sr-only">{{value}}%</span></div></div>',
+        template: '<div class="progress {{valueClass.outter}}"><div class="{{valueClass.inner}} {{innerClass}}" role="progressbar" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="100" ng-style="{width : ( value + \'%\' ) }"><b>{{value}}%</b></div></div>',
         restrict: 'A',
         scope: {
           pwd: '=ngPasswordStrength',
@@ -61,23 +61,26 @@
         });
 
         function getClass(s) {
-          switch (Math.round(s / 33)) {
-            case 0:
-            case 1:
-              return {
-                outter: scope.outterClassPrefix + 'danger',
-                inner: scope.innerClassPrefix + 'danger'
-              };
-            case 2:
-              return {
-                outter: scope.outterClassPrefix + 'warning',
-                inner: scope.innerClassPrefix + 'warning'
-              };
-            case 3:
-              return {
-                outter: scope.outterClassPrefix + 'success',
-                inner: scope.innerClassPrefix + 'success'
-              };
+          if (s < 20) { // Very weak
+            return {
+              outter: scope.outterClassPrefix + 'alert',
+              inner: scope.innerClassPrefix + 'danger'
+            };
+          } else if (s < 40) { // Weak
+            return {
+              outter: scope.outterClassPrefix + 'alert',
+              inner: scope.innerClassPrefix + 'warning'
+            };
+          } else if (s < 60) { // Good
+            return {
+              outter: scope.outterClassPrefix + 'alert',
+              inner: scope.innerClassPrefix + 'info'
+            };
+          } else { // Strong or Very strong
+            return {
+              outter: scope.outterClassPrefix + 'alert',
+              inner: scope.innerClassPrefix + 'success'
+            };
           }
         }
       }
